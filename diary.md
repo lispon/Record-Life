@@ -60,4 +60,49 @@ Note that the returned value is always Qt::NoButton for mouse move events.
     在winsows下,使用qt进行编程,出现`C4819:该文件包含不能再当前代码页(936)中表示的字符。请将该文件保存成Unicode格式以防止数据丢失`的问题。  
 - 解决办法:  
 
-    qt设置选项: **工具/选项/文本编辑器/行为/文件编码**;此处有两个选项,一个是编码格式,默认为utf8;另一个是uft8 BOM的处理办法,此处有三种处理办法,一种是"总是删除",一种是"如果编码是utf-8则添加",一种是目前存在了则保留。出现警告"C4819"的原因是uft8格式中没有BOM,也就是选项"总是删除"导致的问题,所以将**总是删除**,改成**如果编码是uft-8则添加**,再重新保存一下(最好是添加文字,再删除问题,使qt检测到该文件改动,再保存;如果没有检测到改动,单击保存按钮或Ctrl+S是不会重新保存的。),此后就不会再出现警告"C4819",再次提醒,仅仅是在**windows**下测试,其他平台没有测试,可能不适用。
+    qt设置选项: **工具/选项/文本编辑器/行为/文件编码**;此处有两个选项,一个是编码格式,默认为utf8;另一个是uft8 BOM的处理办法,此处有三种处理办法,一种是"总是删除",一种是"如果编码是utf-8则添加",一种是目前存在了则保留。出现警告"C4819"的原因是uft8格式中没有BOM,也就是选项"总是删除"导致的问题,所以将**总是删除**,改成**如果编码是uft-8则添加**,再重新保存一下(最好是添加文字,再删除问题,使qt检测到该文件改动,再保存;如果没有检测到改动,单击保存按钮或Ctrl+S是不会重新保存的。),此后就不会再出现警告"C4819",再次提醒,仅仅是在**windows**下测试,其他平台没有测试,可能不适用。  
+
+## google搜索引擎字符串  
+
+> 20190316
+
+1. google搜索引擎:  
+`https://www.google.com/search?{google:RLZ}{google:acceptedSuggestion}{google:originalQueryForSuggestion}{google:searchFieldtrialParameter}{google:instantFieldTrialGroupParameter}sourceid=chrome&ie={inputEncoding}&q=%s`
+
+## double类型的精度  
+
+> 20190320
+
+1. C#中的一个数据类型`decimal`  
+
+2. 不要依赖调试器观察变量的值,要依赖`printf`,`qDebug()`,`Console`语句的输出.对于double类型的变量,对这个问题有者切身的体会.示例:`double a=0.3102`,通过调试器观察该值,会发现,`a=0.310199999999998`,但是输出到控制台中,还是为`0.3102`.具体原因不是很明白,可能是由于double类型使用二进制来存储.
+
+3. 在**C#**中有`decimal`数据类型可以使用,但是在**C++**中没有,可以通过个折中的方法来实现.
+
+   ``` c++
+   double a = 7218612, b = 60000;
+   double c = (double)(a) / b;//此处,c 实际为 120.3102.
+   qDebug() << c;
+   //但是通过调试器来查看值,c=120.310199999998.使用qDebug()输出到控制台中的数值为120.31
+   double d = 120.3102;
+   qDebug() << d; //此时d=0.3102,输出到控制台中的值也是120.3102
+   //折中的解决办法.
+   int e = a / b;//e = 120
+   int f = a % b;//f = 186120
+   double g = double(f) / (double)(b);//g = 0.3102
+   QString h = QString::number(g);//h = "0.3102"
+   h = QString("%1.%2").arg(e).arg(h.remove("0."));//h = "120.3102"
+   ```
+
+4. 换一种思路
+
+   > 将double类型的数据转换成QString字符串类型,总是会损失精度,那么就不转换,如果需要传值,可以将两个除数和被除数一块传递过去,等需要使用的时候在计算double.
+
+   ``` c++
+   //如果需要计算7218612/60000的值,那么可以这样
+   QString double_str = "7218312/60000";
+   //当需要使用的时候,可以这样.
+   QStringList list = double_str.splite("/");
+   double double_double = list[0].toDouble() / list[1].toDouble();
+   //此时double_double的值就是120.3102,虽然通过调试器观察到的值还是120.3101999998,但是实际是120.3102.
+   ```
