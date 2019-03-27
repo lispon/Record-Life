@@ -120,3 +120,112 @@ Note that the returned value is always Qt::NoButton for mouse move events.
    ```
 
    > 通过上面的代码可以理解,`exactmatch`函数会判断string的整体与QRegExp是否会匹配,而不是string的一部分能与QRegExp匹配.
+
+## c++中的const(未完待续)
+
+> 20190322
+
+1. const的含义
+
+## Qt中QGraphicsItem的boundingRect的值
+
+> 20190322
+
+1. 自定义实现图形项(QGraphicsItem)时,有一个纯虚函数(boundingRect)
+
+   > boundingRect()函数将图形项的外部边界定义为一个矩形,所有的绘图操作都必须限制在图形项的边界矩形中.而且,QGraphicsView要使用这个矩形来剔除那些不可见的图形项,还要使用他来确定绘制交叉项目时哪些区域需要进行重新构建.另外,QGraphicsItem的碰撞检测机制也需要使用到这个边界矩形.如果图形绘制了一个轮廓,那么在边界矩形中包含包含画笔宽度的影响是很重要的.  
+
+   ```Qt
+   QRectF boundingRect()
+   {
+       qreal penWidth = 1;
+       return QRectF(0 - penWidth /2 , 0 - penWidth / 2,
+                     20 + penWidth, 20 + penWidth);
+   }
+   ```
+
+   左上角减去半个画笔的宽度很容易理解,但是右下角为何要加上一个画笔宽度,而非半个画笔宽度.
+
+## Qt的"<<"的使用技巧
+
+> 20190322
+
+1. 向QPolygon之类的数据类型中赋值.
+
+   ```Qt
+   QVector<int> vector_int1;
+   vector_int1 << 1 << 2;
+
+   QVector<int> vector_int2 = QVector<int>() << 1 << 2;
+
+   //上面vector_int1和vector_int2是等价的,表面上看第二种写法可能多输入一次"QVector<int>".
+   //但是,如果输入的实参是QVector<int>的话,使用第二种写法可以省略声明变量.
+   void SumAllInt(QVector<int>);
+   那么调用的时候可以这样写:(主要QVector<int>后面的括号)
+   SumAllInt(QVector<int>() << 1 << 2 << 3);
+
+   ```
+
+## Qt的警告信息`QPainter::end: Painter ended with 2 saved states`
+
+> 20190326
+
+1. 出现这个问题的原因: 在使用painter的过程中,有一处没有配对出现save()和restore()方法造成的.
+
+## GDAL的警告信息`ERROR 1: Invalid index : -1`
+
+> 20190326
+
+1. 出现这个问题的原因之一是使用`OGRFeature::GetFieldAsString(const char*)`等等的`GetFieldAs...(const char*)`的函数,凡是海图文件中没有`const char*` 所表示的属性名称.
+
+2. 解决办法:
+
+   ```Qt
+   OGRFeature* feature;
+   //feature已经定义
+   QString value = feature->GetFieldAsString("ORIENT");
+   //如果该feature中没有ORIENT这个属性,就会出现警告"ERROR 1: Invalid index : -1"
+
+   //应该先判断feature中是否有这个属性,在进行读取.
+   int index = feature->GetFiedlIndex("ORIENT");
+   if(index != -1){
+       value = feature->GetFieldAsString("ORIENT");
+       //也可以
+       value = featuer->GetFieldAsString(index);
+   }
+
+   //如果简化代码的话,可以这样
+   if(feature->GetFieldIndex("ORIENT") != -1){
+       value = feature->GetFieldAsString("ORIENT");
+   }
+   //这种方法定义了一个变量.
+   ```
+
+## Qt中的ui设计师界面中转到槽
+
+> 20190327
+
+1. 在Qt的ui设计师界面中,添加一个pushButton,右键转到槽,会自动添加以下代码
+
+   ```Qt
+   //在.h文件中
+   private slots:
+       void on_pushButton_clicked();
+   //在.cpp文件中
+   void <classname>::on_pushButton_clicked()
+   {
+       //
+   }
+   ```
+
+   检测整个检测的流程,没有发现`connect`的函数将点击事件与槽函数连接起来.应该是Qt会根据命名规则自动连接空间的点击事件和槽函数.自定义槽函数的时候,不要与Qt的命名规则冲突.
+
+2. 以下来自Qt的官方文档
+
+   `void **QMetaObject**::connectSlotsByName(**QObject** \*object)`  
+   Searches recursively for all child objects of the given *object*, and connects matching Signals from them to slots of *object* that follow the following form.  
+   `void on<object name>_<signal name>(<signal parameters>);`  
+   Let's assume our object has a child object of type *QPushButton* with object name *button1*.The slot to catch the button's *clicked()* Signal would be:  
+   `void on_button1_clicked();`  
+   If object itself has a properly set object name,its own signals are also connected to its respective slots.
+   **See also** QObject::setObjectName();
