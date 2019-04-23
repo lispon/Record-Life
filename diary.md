@@ -218,14 +218,113 @@ Note that the returned value is always Qt::NoButton for mouse move events.
    }
    ```
 
-   检测整个检测的流程,没有发现`connect`的函数将点击事件与槽函数连接起来.应该是Qt会根据命名规则自动连接空间的点击事件和槽函数.自定义槽函数的时候,不要与Qt的命名规则冲突.
+   监测整个写入代码的流程,没有发现`connect`的函数将点击事件与槽函数连接起来.应该是Qt会根据命名规则自动连接空间的点击事件和槽函数.自定义槽函数的时候,不要与Qt的命名规则冲突.
 
 2. 以下来自Qt的官方文档
 
-   `void **QMetaObject**::connectSlotsByName(**QObject** \*object)`  
+   `void QMetaObject::connectSlotsByName(QObject *object)`  
    Searches recursively for all child objects of the given *object*, and connects matching Signals from them to slots of *object* that follow the following form.  
    `void on<object name>_<signal name>(<signal parameters>);`  
    Let's assume our object has a child object of type *QPushButton* with object name *button1*.The slot to catch the button's *clicked()* Signal would be:  
    `void on_button1_clicked();`  
    If object itself has a properly set object name,its own signals are also connected to its respective slots.
    **See also** QObject::setObjectName();
+
+## Qt的QComboBox控件的显示问题
+
+> 20190329
+
+1. 使用Qt Creator中的ui设计器,在widget中添加一个`QComboBox`控件,添加项目(Item),第一个为"FALSE",第二个为"TRUE".
+
+   ```Qt
+   //QComboBox的名称为combobox
+   combobox->setCurrentIndex(1);//显示TRUE
+   combobox->setCurrentText("FALSE");//显示FALSE
+   //第一个项目为默认值,如果设置当前的文本没有在QCombobox中的列表中找到,会显示第一个位置的文本,即index(0)的内容.
+   combobox->setCurrentText("F");//FALSE.
+   ```
+
+## Qt和VS同时编程
+
+> 20190415
+
+1. 在使用Qt编程的情况下,并且使用vs进行调试(因为qt的调试功能不如vs的强大),不要同时使用vs和qt同时打开一个工程,否则,会出现一个问题
+
+   在vs中调试的过程中,发现错误,并修改保存,退出;此时,如果需要关闭Qt,当Qt处于焦点状态的时候,会出现弹窗,询问:  
+   **The file mapcanvas.cpp has been changed on disk. Doyou want to reload it?**  
+   **Yes ; Yes to All ; No ; No to All ; No to All &Diff; 显示细节…… ; Close ;**(此处为选项)  
+   如果没有reload,并且还重新保存了,那么,之前修改的所有内容会被修改前的内容覆盖,而且再也找不回来了(如果修改后的版本没有上传到版本管理工具的话).
+
+## C++声明
+
+ > 20190422
+
+ 1. 使用C++声明一个函数的时候, 形参名称可以省略,例如下面:  
+    `void GetValue(int, int)`
+
+    但是, 没有名称, 谁知道这两个int表示什么含义. 对该函数注释的话, 没有形参名称, 那么只能"第一个int表示..., 第二个int表示...". 相反, 加上形参名称就可以一目了然: "name1表示..., name2表示..."  
+    `void GetValue(int name1, int name2`
+
+## 使用QColor的过程遇到的QMap的一个易错点
+
+> 20190422
+
+1. 下面是代码
+
+   ```Qt
+    QMap<QString,QColor> mapcolor;
+    mapcolor["red"] = QColor(255,0,0);
+    mapcolor["green"] = QColor(0,255,255);
+    QMap<QString,QColor>::iterator iter = mapcolor.find("red");
+    QPainter p(this);
+    QPen pen;
+
+    //片段一
+    pen.setColor(iter->value());//只有这一行不同
+    p.setPen(pen);
+    p.drawText(20,20,QString("red:%1, green:%2, blue:%3.")
+               .arg(pen.color().red())  //值为0;
+               .arg(pen.color().green())  //值为0;
+               .arg(pen.color().blue()));  //值为255;
+
+    //片段二
+    pen.setColor(iter.value());//只有这一行不同.
+    p.setPen(pen);
+    p.drawText(20,50,QString("red:%1, green:%2, blue:%3.")
+                .arg(pen.color().red())  //值为255;
+                .arg(pen.color().green())  //值为0;
+               .arg(pen.color().blue()));  //值为0;
+   ```
+
+2. 上面代码中有两个片段, 其中片段一和片段二只有一个符号不同, 就是**iter**后面的 **->** 和 **.**; 但是结果截然不同.使用 **->** 所匹配的结果(颜色)显然是不正确的, 但是使用Qt Creator没有提示语法错误; 使用 **.** 所匹配的结果才是正确的. 但是当QMap中没有QColor时,使用 **->** 就是提示语法错误, 暂时不知是QMap的错误还是有隐藏的用法.
+
+## Qt断言
+
+> 20190423
+
+1. Qt断言中可以使用两个宏 **Q_ASSERT** 和 **Q_ASSERT_X**.  
+
+   ```Qt
+   bool ass = false;
+   //Q_ASSERT()出现错误的弹窗.显示以下信息.
+     //Debug Error!
+     //Program:一般为.dll文件路径.
+     //Modele:Qt版本号.
+     //File:该断言所在文件的绝对路径.
+     //Line:该断言所在文件的行数.
+     //ASSERT:"ass" in file d:\qt\main.cpp,line 53
+     //(Press Retry to debug the application)
+   Q_ASSERT(ass);  //如果点击忽略,可继续执行断言后的代码.
+
+   //Q_ASSERT_X()出现错误弹窗.显示的信息几乎相同,下面仅列出不同的信息.
+   //ASSERT failure in ass: "ass = 0", file d:\qt\main.cpp,line 53
+   //其余显示的信息完全相同.
+   Q_ASSERT_X(ass, "ass", "ass = 0");
+   ```
+
+2. 断言仅在Debug模式下启用,如果在Release模式下,不会启用.
+
+3. 断言和异常处理不同,不能混为一谈.
+
+assert用在那些你知道绝对不会发生的事情上,但是因为人总是会犯错误,保不准你写出来的东西跟你想的不一样.所以assert用来捕捉的是程序员自己的错误.  
+同理,exception捕捉的是用户或者环境的错误.
