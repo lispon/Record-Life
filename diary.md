@@ -328,3 +328,59 @@ Note that the returned value is always Qt::NoButton for mouse move events.
 
 assert用在那些你知道绝对不会发生的事情上,但是因为人总是会犯错误,保不准你写出来的东西跟你想的不一样.所以assert用来捕捉的是程序员自己的错误.  
 同理,exception捕捉的是用户或者环境的错误.
+
+## C++接口(抽象类)
+
+> 20190425
+
+   C++接口时使用**抽象类**来实现的. 抽象类中至少有一个函数被声明为**纯虚函数**.
+
+1. 虚函数和纯虚函数
+
+   关键字: **virtual** , 在类中正常声明的成员函数的前面加上virtual, 则为虚函数; 如果, 一个虚函数的声明 **= 0** ,则为纯虚函数, `virtual 返回值数据类型 函数名() = 0;`; 如果, 类中至少有一个函数被声明为纯虚函数, 则该类就是**抽象类**.  
+
+2. 继承
+
+   直接上代码.
+
+   ```C++
+    //基类
+    class Shape
+    {
+     public:
+        Shape() {};
+        virtual int getarea() = 0;
+        //virtual int getarea() { return 0; }
+    };
+
+    //派生类
+    class Rectangle : public Shape
+    {
+     public:
+        //纯虚函数的实现.
+        int getarea() { return 4; }
+        int special() { return -1;}
+    };
+    class Triangle : public Shape
+    {
+     public:
+        //纯虚函数的实现.
+        int getarea() { return 3; }
+    };
+
+    int main()
+    {
+        //着重注意这一句代码.
+        Shape* shape[2] = { new Triangle(), new Rectangle() };
+
+        std::cout << "Triangle:" << shape[0]->getarea() << std::endl;
+        std::cout << "Rectangle:" << shape[1]->getarea() << std::endl;
+    }
+   ```
+
+   上面main函数中的第一句代码`Shape* shape[2] = { new Triangle(), new Rectangle() };`, 定义了一个数组,这里包含了几个点需要说一下:
+
+   - 纯虚函数不能被实例化.
+   - 派生类的实例化: 派生类的构造函数的执行前,会首先执行基类的构造函数,可以使用**new**关键字来使用派生类对基类的实例化. 但是不能使用基类对派生类的实例化. 要就是不能`Triangle* triangle = new Shape();`, 这句代码是错误的.
+   - 关于Shape中的纯虚函数: `getarea()`是纯虚函数, 那么, 在上面的代码中的**main**函数中, **Shape[0]**是Triangle类的实例化, **Shape**是Rectangle类的实例化. 如果, Shape中纯虚函数改为虚函数, 虽然输出的结果相同, 都是执行的Rectangle::getarea(), 但是Shape类可以实例化. 此时, Rectangle::getarea()称为Shape::getarea()函数的重新定义, 而非之前的虚函数的实现.
+   - 关于`Shape[0]->special();`, Shape[0]中不存在special()函数.
