@@ -439,3 +439,60 @@ assert用在那些你知道绝对不会发生的事情上,但是因为人总是�
    QPushButton btn;
    int receivers = btn.receivers(SIGNAL(clicked(bool)));
    ```
+
+## 编程学习之路
+
+>20190520
+
+1. 计算机组成原理
+2. DOS命令
+3. 汇编语言
+4. C语言(不包括C++), 代码书写规范
+5. 数据结构, 编译原理, 操作系统
+6. 计算机网络, 数据库原理, 正则表达式
+7. 其他语言(包括C++)
+8. 架构......
+
+## qSort(Iterator begin, Iterator end, bool lessThan)
+
+>20190521
+
+1. qt文档对此函数的描述
+
+   This is and overloaded function.  
+   Use std::sort instead.  
+   Uses the lessThan function instead of operator<() to compare the items.  
+   For example, here's how to sort the strings in a QStringList in case-insensitive alphabetical order:
+  
+   ```Qt
+   bool caseInsensitiveLessThan(const QString& s1, const QString& s2)
+   {
+       return s1.toLower() < s2.toLower();
+   }
+
+   int doSomething()
+   {
+       QStringList list;
+       list << "Alpah" << "beTA" << "gamma" << "DELTA";
+       qSort(list.begin(), list.end(), caseinsensitiveLessThan);
+       // list: [ "Alpha", "beTA", "DELTA", "gamma" ]
+   }
+
+   // 如果doSomething是类中的函数, 那么caseInsensitiveLessThan必须在类外声明, 否则会出现无法识别标识符caseInsensitiveLessThan.
+   ```
+
+## c++计算每个函数的执行时间(clock_t)
+
+>20190527
+
+```c++
+clock_t startTime,endTime;
+    startTime = clock();
+    for (int i = 0; i < 1000000; i++)
+    {
+        i++;
+    }
+    endTime = clock();
+    //函数执行所用的时间:
+    double thetime = endTime - startTime;
+```
