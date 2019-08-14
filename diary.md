@@ -6,13 +6,13 @@
 
 1. 概念
 
-- UTM:
-  > UTM(Universal Transverse Mercator projection), 是通用横轴墨卡托投影, 是一种等角横轴割圆柱投影. 椭圆柱割地球于南纬80度,北纬84度两条等高圈。投影后两条相割的经线上没有变形, 而中央经线的长度比为0.9996. 国际大地测量学会曾建议, 中央子午线投影后,其投影长度适当缩短, (即长度比例因子K为0.9996, 中央经线比例因子取0.9996是为了保证离中央经线约330K处有两条不失真的标准经线) 以减少投影边缘地区的长度变形. 这个建议就是统一横轴墨卡托投影, 也称为通用横轴墨卡投影, 简称为UTM投影.  
+    - UTM:
+     > UTM(Universal Transverse Mercator projection), 是通用横轴墨卡托投影, 是一种等角横轴割圆柱投影. 椭圆柱割地球于南纬80度,北纬84度两条等高圈。投影后两条相割的经线上没有变形, 而中央经线的长度比为0.9996. 国际大地测量学会曾建议, 中央子午线投影后,其投影长度适当缩短, (即长度比例因子K为0.9996, 中央经线比例因子取0.9996是为了保证离中央经线约330K处有两条不失真的标准经线) 以减少投影边缘地区的长度变形. 这个建议就是统一横轴墨卡托投影, 也称为通用横轴墨卡投影, 简称为UTM投影.  
 
-- 高斯-克吕格投影:  
-  > 高斯—克吕格投影 (Gauss--Kruger), 是一种等角横切椭圆柱投影.  
+    - 高斯-克吕格投影:  
+    > 高斯—克吕格投影 (Gauss--Kruger), 是一种等角横切椭圆柱投影.  
 
-2. 两者之间的异同  
+2. 两者之间的异同
 
 - 两者都是横轴墨卡托投影的变种.  
 
@@ -496,3 +496,206 @@ clock_t startTime,endTime;
     //函数执行所用的时间:
     double thetime = endTime - startTime;
 ```
+
+## 关于代码格式化(未完)
+
+>20190606
+
+1. qt中代码格式化
+
+---
+
+## google搜索技巧
+
+>20190609
+
+### 关键字
+
+1. 双引号
+
+   把搜索词放在双引号中，代表完全匹配搜索，也就是说搜索结果返回的页面包含双引号中出现的所有的词，连顺序也必须完全匹配。bd和Google 都支持这个指令。例如搜索： “seo方法图片”
+
+2. 减号
+
+   减号代表搜索不包含减号后面的词的页面。使用这个指令时减号前面必须是空格，减号后面没有空格，紧跟着需要排除的词。Google 和bd都支持这个指令。例如：搜索 -引擎返回的则是包含“搜索”这个词，却不包含“引擎”这个词的结果
+
+3. 星号
+
+   星号*是常用的通配符，也可以用在搜索中。百度不支持*号搜索指令。比如在Google 中搜索：搜索*擎其中的*号代表任何文字。返回的结果就不仅包含“搜索引擎”，还包含了“搜索收擎”，“搜索巨擎”等内容。
+
+4. inurl
+
+    inurl指令用于搜索查询词出现在url 中的页面。bd和Google 都支持inurl 指令。inurl 指令支持中文和英文。比如搜索：inurl:搜索引擎优化返回的结果都是网址url 中包含“搜索引擎优化”的页面。由于关键词出现在url 中对排名有一定影响，使用inurl:搜索可以更准确地找到竞争对手。
+
+5. inanchor
+
+   inanchor指令返回的结果是导入链接锚文字中包含搜索词的页面。百度不支持inanchor。比如在Google 搜索 ：inanchor:点击这里返回的结果页面本身并不一定包含“点击这里”这四个字，而是指向这些页面的链接锚文字中出现了“点击这里”这四个字。可以用来找到某个关键词的竞争对收，而且这些竞争对手往往是做过SEO 的。研究竞争对手页面有哪些外部链接，就可以找到很多链接资源。
+
+6. intitle
+
+   intitle指令返回的是页面title 中包含关键词的页面。Google 和bd都支持intitle 指令。使用intitle 指令找到的文件是更准确的竞争页面。如果关键词只出现在页面可见文字中，而没有出现在title 中，大部分情况是并没有针对关键词进行优化，所以也不是有力的竞争对手。
+
+7. allintitle
+
+   allintitle搜索返回的是页面标题中包含多组关键词的文件。例如 ：allintitle:SEO 搜索引擎优化就相当于：intitle:SEO intitle:搜索引擎优化返回的是标题中中既包含“SEO”，也包含“搜索引擎优化”的页面
+
+8. allinurl与allintitle
+
+   类似。allinurl:SEO 搜索引擎优化就相当于 ：inurl:SEO inurl:搜索引擎优化
+
+9. filetype
+
+   用于搜索特定文件格式。Google 和bd都支持filetype 指令。比如搜索filetype:pdf SEO返回的就是包含SEO 这个关键词的所有pdf 文件。
+
+10. site
+
+    site是SEO 最熟悉的高级搜索指令，用来搜索某个域名下的所有文件。
+
+11. related
+
+    related指令只适用于Google，返回的结果是与某个网站有关联的页面。比如搜索`related:http://cnseotool.com`我们就可以得到Google 所认为的与点石网站有关联的其他页面。 这种关联到底指的是什么，Google 并没有明确说明，一般认为指的是有共同外部链接的网站。
+
+12. linkdomain
+
+linkdomain指令只适用于雅虎，返回的是某个域名的反向链接。雅虎的反向链接数据还比较准确，是SEO 人员研究竞争对手外部链接情况的重要工具之一。比如搜索`linkdomain:http://cnseotool.com -site:http://cnseotool.com`得到的就是点石网站的外部链接，因为`-site:http://cnseotool.com` 已经排除了点石本身的页面，也就是内部链接，剩下的就都是外部链接了。
+
+## 隐藏逻辑和明确代码
+
+>20190610
+
+1. 这里有一个疑问, 直接上代码:
+
+   ```Qt
+   bool ismatch = false;
+   int lineindex = -1;
+   QList<??> matchinglines;  // 这是一个QList容器, 里面的内容不具体考虑.
+   for (int i = 1; i < matchinglines.length(); ++i) {
+     ismatch = IsMatching(matchinglines.at(i));  // return true or flase;
+     if(ismatch) {
+       // 匹配matchinglines[i].
+       lineindex = i;
+       break;
+     }
+   }
+   if (!ismatch) {
+     // 匹配matchinglines[0].
+     lineindex = 0;
+   }
+   return matchinglines.at(lineindex);
+   ```
+
+2. 大体思路是:
+
+   遍历QList容器, 如果IsMatching == true, 那么, 获取QList中的特定元素; 如果IsMatching == false, 那么, 获取QList中的第一个元素.
+
+3. 那么, 使用隐藏的逻辑, 还是, 使用明确的代码?
+
+   方案一: 明确代码, `lineindex`的默认值为`-1`, 最后还有一步`lineindex = 0`;
+
+   方案二: 隐藏逻辑, 令`lineindex = 0`, `for循环遍历`, 没有最后一步对`lineindex`重新赋值为`0`.
+
+   哪一种方案好呢?
+
+## qt调试过程进入源码
+
+>20190611
+
+1. 首先下载源码
+
+   下载的源码好像有两种, 一个是700多M, 一个是2个多G, 都能单步进入源码调试, 但是效果大不相同. 应该是下载2个多G的那个.
+
+2. 下载PDB文件
+
+   由于5.11.1版本Qt的dll和pdb文件是分开的, 需要在安装完成Qt后单独下载. 找到下载Qt安装包的位置,pdb文件的名称为 `qt-opensource-windows-x86-pdb-files-desktop-5.11.1.7z`, 下载并解压该文件. 解压出3个文件夹`msvc2015, msvc2015_64, msvc2017_64`, 找到Qt安装路径(默认为C:\Qt\Qt5.11.1\Qt5.11.1), 根据需要选择解压出来的三个文件夹, 复制到Qt安装路径下.
+
+   **注意**, 虽然解压出来的3个文件夹内还有递进的文件夹, 只需选中`msvc2017_64`层级的文件夹, 复制Qt安装路径夹下即可, 会自动复制到Qt安装路径下原有的`msvc2017_64`文件夹中对应的位置(包括整个文件结构).
+
+3. Qt Creator调试Qt源码
+
+   依次打开菜单栏`Tools -> Options -> debugger -> General`, 可以发现大片空白的地方, `Source Paths Mapping`, 点击添加`Add Qt sources`, 选择安装qt的位置, 默认是在`c:\Qt\Qt5.11.1\Src`, 确定后, 自动出现`c:/work/build/qt5_workdir/w/s`等等四行路径. 点击`Ok`完成.
+
+4. VS调试Qt源码
+
+   使用VS打开pro工程(Qt工程), 在解决方案资源管理器中右键解决方案 -> 属性 -> 通用属性 -> 调试源文件, 在`包含源代码的目录`中添加Qt源代码所在的路径(`c:\Qt\Qt5.11.1\Src`), 点击确定即可完成.  
+
+   **注意**, 在解决方案资源管理器中, 有容易弄错的地方, 一个是解决方案, 一个是项目. 在项目中右键->属性,没有调试源代码的选项. 解决方案有"解决方案"四个字.
+
+5. 使用F11单步调试即可
+
+## qt中将QString转化成const char\*的注意事项
+
+>20190618
+
+1. 将QString变量转化成const char\*变量
+
+   ```Qt
+   QString str = "ABCDE";
+   // 将QString一步到位地转化成const char*会出错. 转换出来的内容是乱码.
+   const char* cch = str.toLatin1().data();
+   // 正确的转化方式是先将QString转化成QByteArray,然后转化成const char*.
+   QByteArray ba = str.toLatin1();
+   const char* ch = ba.data();
+   ```
+
+2. 在形参列表中
+
+   当函数中的形参为const char\*时, 实参可以将QString直接一步到位地转化成const char\*.
+
+   ```Qt
+   // 在.h文件中
+   void ConvertQstring(const char*);
+   // 在.cpp文件中
+   // 调用ConvertQstring函数
+   QString str = "ABCDEF";
+   ConvertQstring(str.toLatin1().data());
+   ```
+
+## qt中QString::arg的注意事项
+
+> 20190619
+
+1. ~~QString::arg(const QString& a1, const QString& a2)~~
+
+   疑似Qt的bug, 之后再运行, 好像就没有出现下面`%2`的效果了.
+
+   ```Qt
+   QString a1 = "a";
+   QString a2 = "b";
+   QString b = '\0';
+   QString result = '\0';
+   result = QString("%1%2").arg(a1, a2);        // result = "ab".
+   result = QString("%1%2").arg(a1).arg(a2);    // result = "ab".
+   result = QString("%1%2").arg(a1, b);         // result = "a%2".
+   result = QString("%1%2").arg(a1).arg(b);     // result = "a".
+   // 上面代码可以看出, 如果不确定添加到QString是否为空, 那么最好是使用多个arg来逐一添加.
+   ```
+
+2. 官方Qt文档中提到的一个注意事项
+
+   ```Qt
+   QString str;
+   str = "%1%3%2";
+   str.arg("hello").arg(20).arg(50);  // returns "hello500"
+
+   str = "%1%2%3";
+   str.arg("hello").arg(50).arg(20);  // returns "hello5020"
+   // Let's look at the substitutions:
+   // First, Hello replaces %1 so the string becomes "Hello%3%2".
+   // Then, 20 replaces %2 so the string becomes "Hello%320".
+   // Since the maximum numbered place marker value is 99, 50 replaces %32.
+   // Thus the string finally becomes "Hello500".
+   ```
+
+## VS使用Qt编程时'未找到xx函数的定义'的一个奇怪的问题
+
+1. 删除中文注释, 改用英文注释.
+
+   当出现这个问题时, 一定是在文件中有中文的注释, 最简单的方法是**删除中文注释, 改用英文注释".
+
+2. 改变文件编码格式
+
+   如果必须使用中文注释, 那么最好使用utf8的编码格式. Qt默认的编码格式就是utf8, 而中文语言系统下的window中的VS的默认编码格式为GBK. 当使用Qt或VS新建文件时, 文件的编码格式都是默认编码格式. 所以, 最好是在Qt(Qt Creator)中新建文件.
+
+3. 将使用的宏替换
+
+   有时在VS中会遇到一个奇怪的问题, 那就是所有的文件编码格式都改为了utf8, 但是在VS的头文件中还是会提示**未找到xx函数的定义**, 有些函数会提示, 有些函数不会提示; 在Qt中则不会出现这个提示. 我遇到了这个问题, 查找原因, 是因为我使用了**foreach(variable, container)**这个宏. 查看Qt帮助文件对foreach宏的说明, `Since Qt 5.7, the use of this macro is discouraged. It will be removed in a future version of Qt. Please use C++11 range-for, possibly with qAsConst(), as needed.`. 这里提到, foreach不推荐使用. 所以大胆的替换. 将foreach替换后, VS就不再会提示**未找到xx函数的定义**这个问题了, 显然, 问题已经解决. 可能除了foreach之外, 还有其他宏会导致这个问题.
