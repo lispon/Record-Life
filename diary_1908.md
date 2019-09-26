@@ -88,4 +88,8 @@
 
 1. QPicture::save及QPicture::load函数
 
-   load和save函数中的QString是文件的路径, 而非仅仅是文件名称. 可以使用`c:/user/desktop`或`c:\\user\\desktop`格式的路径, 如果没有该文件夹, 可能不会新建.
+   load和save函数中的QString是文件的路径, 而非仅仅是文件名称. 可以使用`c:/user/desktop`或`c:\\user\\desktop`格式的路径, 如果没有该文件夹, 不会自动根据路径新建文件夹.
+
+2. QPicture::save和load函数不需要一一对应
+
+   只要存在QPicture生成的二进制, 就可以使用QPicture::load函数; 同理, 可以只使用save函数.
